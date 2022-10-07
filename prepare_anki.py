@@ -3,7 +3,7 @@
 from subprocess import call
 import urllib.request
 import time
-import os.path
+import random
 
 rc = call("./scrap_page.sh")
 
@@ -21,7 +21,12 @@ while i < len(bollard_list):
     if bollard_list[i].startswith("Sources"):
         if not bollard_list[i+1].startswith("Sources"):
             country = bollard_list[i+1].strip() 
-        countries[bollard_list[i]] = country
+        key_name = country
+        suffix = 1
+        while f"{key_name}_{suffix}" in countries:
+            suffix += 1
+        key_name = f"{key_name}_{suffix}" 
+        countries[key_name] = bollard_list[i] 
     i += 1
 
 opener = urllib.request.build_opener()
@@ -32,11 +37,7 @@ opener.addheaders = [
 urllib.request.install_opener(opener)
 
 for key, value in countries.items():
-    filename = f"bollards/{value}"
-    i = 2
-    while os.path.isfile(filename):
-        filename = f"{filename}_{i}"
-        i += 1
-    filename = f"{filename}.jpg"
-    urllib.request.urlretrieve(f"https://geohints.com/{key}",filename)
-    time.sleep(0.2)
+    filename = f"bollards/{key}.jpg"
+    urllib.request.urlretrieve(f"https://geohints.com/{value}",filename)
+    print(filename)
+    time.sleep(1/random.randint(0, 9))

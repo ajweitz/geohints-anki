@@ -5,6 +5,9 @@ TEMP_FILE=bollards_temp.html
 TEMP_FILE2=bollards_temp2.txt
 TEMP_FILE3=bollards_temp3.txt
 
+# ensure dir is empty
+rm -rf bollards
+
 # Leave just URLs and Country Names
 curl $GEO_HINTS_URL | \
     tail -n +20 | \
