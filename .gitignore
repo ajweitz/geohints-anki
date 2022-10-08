@@ -1,3 +1,6 @@
 *.html
 bollards
 bollard*.txt
+*.jpg
+*.apkg
+.DS_Store

@@ -1,29 +1,42 @@
+# https://github.com/kerrickstaley/genanki
 import genanki
+from os import listdir
+from os.path import isfile, join
 
 my_model = genanki.Model(
-  1607392319,
-  'Simple Model',
+  1234567534,
+  'Simple Model with Media',
   fields=[
-    {'name': 'Question'},
-    {'name': 'Answer'},
+    {'name': 'Picture'},
+    {'name': 'Answer'}
   ],
   templates=[
     {
       'name': 'Card 1',
-      'qfmt': '{{Question}}',
+      'qfmt': '{{Picture}}',
       'afmt': '{{FrontSide}}<hr id="answer">{{Answer}}',
     },
   ])
 
-my_note = genanki.Note(
-  model=my_model,
-  fields=['Capital of Argentina', 'Buenos Aires'])
-
 my_deck = genanki.Deck(
-  2059400110,
-  'Country Capitals')
+  3234561213,
+  'Geoguessr Bollards')
 
-my_deck.add_note(my_note)
+folder = 'bollards'
+files = [f"{folder}/{f}" for f in listdir(folder) if isfile(join(folder, f))]
+media_files = []
+for f in files:
+    file_name = f.split('/')[-1]
+    country_name = file_name.split('_')[0]
+    if country_name != '':
+        media_files.append(f)
 
+        my_note = genanki.Note(
+            model=my_model,
+            fields=[f'<img src="{file_name}">',country_name])
 
-genanki.Package(my_deck).write_to_file('output.apkg')
+        my_deck.add_note(my_note)
+
+my_package = genanki.Package(my_deck)
+my_package.media_files = media_files
+my_package.write_to_file('bollards_anki_deck.apkg')
